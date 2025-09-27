@@ -97,26 +97,28 @@ class MainWindow(QMainWindow):
     '''Редактирование строки (обработка нажатия кнопки "Редактировать").'''
     def edit_song(self):
         selected = self.ui.songTable.selectedIndexes()
-        row = selected[0].row()
-        cur_preview_data = self.model.item(row, 0).data(Qt.UserRole + 1)  # Текущие байты изображения
-        data = {
-            'title': self.model.item(row, 1).text(),
-            'artist': self.model.item(row, 2).text(),
-            'duration': self.model.item(row, 3).text(),
-            'preview': cur_preview_data if isinstance(cur_preview_data, bytes) else '',
-            'rating': self.model.item(row, 0).data(Qt.UserRole) or 1
-         }
-        dialog = SongDialog(self, data)
-        if dialog.exec_() == QDialog.Accepted:
-            data = dialog.data
-            if not data['preview'] or data['preview'] == '':
-                data['preview'] = cur_preview_data
-            self.update_row(row, data)
+        if selected:
+            row = selected[0].row()
+            cur_preview_data = self.model.item(row, 0).data(Qt.UserRole + 1)  # Текущие байты изображения
+            data = {
+                'title': self.model.item(row, 1).text(),
+                'artist': self.model.item(row, 2).text(),
+                'duration': self.model.item(row, 3).text(),
+                'preview': cur_preview_data if isinstance(cur_preview_data, bytes) else '',
+                'rating': self.model.item(row, 0).data(Qt.UserRole) or 1
+            }
+            dialog = SongDialog(self, data)
+            if dialog.exec_() == QDialog.Accepted:
+                data = dialog.data
+                if not data['preview'] or data['preview'] == '':
+                    data['preview'] = cur_preview_data
+                self.update_row(row, data)
 
     '''Удаление строки (обработка нажатия кнопки "Редактировать").'''
     def delete_song(self):
         selected = self.ui.songTable.selectedIndexes()
-        self.model.removeRow(selected[0].row())
+        if selected:
+            self.model.removeRow(selected[0].row())
 
     '''Сохранение таблицы в БД (обработка нажатия кнопки "Сохранить").'''
     def save_data(self):
@@ -199,9 +201,11 @@ class SongDialog(QDialog):
         }
         super().accept()
 
-
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
