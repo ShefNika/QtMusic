@@ -35,9 +35,9 @@ class MainWindow(QMainWindow):
 
         self.ui.songTable.setColumnWidth(0, 70)
         self.ui.songTable.setIconSize(QSize(60, 60))
-        self.ui.songTable.setColumnWidth(1, 150)
-        self.ui.songTable.setColumnWidth(2, 150)
-        self.ui.songTable.setColumnWidth(3, 200)
+        self.ui.songTable.setColumnWidth(1, 210)
+        self.ui.songTable.setColumnWidth(2, 210)
+        self.ui.songTable.setColumnWidth(3, 152)
         self.ui.CreateButton.clicked.connect(self.create_song)
         self.ui.EditButton.clicked.connect(self.edit_song)
         self.ui.DeleteButton.clicked.connect(self.delete_song)
