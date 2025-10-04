@@ -11,7 +11,7 @@ import ui_song_dialog
 '''
     Класс главного окна, для вывода таблицы плейлиста. Наследуется от QMainWindow.
     Поля:  
-        ui - экземпляр интерфейса главного онка, сохданный в designer
+        ui - экземпляр интерфейса главного онка, созданный в designer
         model - модель данных для таблицы (экземпляр QStandartModel)
         proxy-model - прокси модель для сортировки и поиска (экземпляр QSortFilterProxyModel)
         conn - подключение к БД SQLite
@@ -98,7 +98,8 @@ class MainWindow(QMainWindow):
     def edit_song(self):
         selected = self.ui.songTable.selectedIndexes()
         if selected:
-            row = selected[0].row()
+            index = selected[0]
+            row = self.proxy_model.mapToSource(index).row()
             cur_preview_data = self.model.item(row, 0).data(Qt.UserRole + 1)  # Текущие байты изображения
             data = {
                 'title': self.model.item(row, 1).text(),
@@ -118,7 +119,8 @@ class MainWindow(QMainWindow):
     def delete_song(self):
         selected = self.ui.songTable.selectedIndexes()
         if selected:
-            self.model.removeRow(selected[0].row())
+            index = selected[0]
+            self.model.removeRow(self.proxy_model.mapToSource(index).row())
 
     '''Сохранение таблицы в БД (обработка нажатия кнопки "Сохранить").'''
     def save_data(self):

@@ -11,16 +11,18 @@ def main():
             print("Ошибка! Не удается установить системные зависимости.")
             sys.exit(1)
 
-    file = "qt_music-1_0_0-py3-none-any.whl" if sys.platform.startswith('linux') else "qt_music-1.0.0-py3-none-any.whl"
-    if not os.path.exists(file):
-        print(f"Ошибка! Файл {file} не найден.")
+    whl_files = [f for f in os.listdir('.') if f.endswith('.whl')]
+    if not whl_files:
+        print("Ошибка! .whl файл не найден в текущей директории.")
         sys.exit(1)
+    whl_file = whl_files[0]
+    print(f"Найден .whl файл: {whl_file}")
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", file])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", whl_file])
+        print("Установка завершена. Запуск приложения осуществляется командой: qt-music")
     except subprocess.CalledProcessError:
         print("Ошибка! Не удается установить .whl файл.")
         sys.exit(1)
-    print("Установка завершена. Запуск приложения осуществляется командой: qt-music")
 
 if __name__ == "__main__":
     main()
